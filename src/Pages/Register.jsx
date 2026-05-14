@@ -1,44 +1,41 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-export default function Login() {
+export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-
-    if (username === 'admin' && password === 'admin123') {
-      localStorage.setItem('currentUser', 'admin');
-      navigate('/todos');
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    if (users.find(u => u.username === username)) {
+      setError('This username is already taken!');
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const foundUser = users.find(u => u.username === username && u.password === password);
-
-    if (foundUser) {
-      localStorage.setItem('currentUser', username);
-      navigate('/todos');
-    } else {
-      setError('Invalid username or password!');
-    }
+    users.push({ username, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    alert('Registration successful! You can now login.');
+    navigate('/login');
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">Login</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-green-600">Create Account</h2>
         
         {error && <p className="bg-red-100 text-red-600 p-2 rounded mb-4 text-sm text-center">{error}</p>}
         
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <input 
             type="text" 
             placeholder="Username" 
-            className="border p-2 rounded outline-none focus:ring-2 focus:ring-blue-400"
+            className="border p-2 rounded outline-none focus:ring-2 focus:ring-green-400"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -46,21 +43,21 @@ export default function Login() {
           <input 
             type="password" 
             placeholder="Password" 
-            className="border p-2 rounded outline-none focus:ring-2 focus:ring-blue-400"
+            className="border p-2 rounded outline-none focus:ring-2 focus:ring-green-400"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button 
             type="submit" 
-            className="bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700 transition"
+            className="bg-green-600 text-white p-2 rounded font-bold hover:bg-green-700 transition"
           >
-            Sign In
+            Register
           </button>
         </form>
-
+        
         <p className="mt-4 text-center text-sm text-gray-600">
-          New here? <Link to="/register" className="text-green-600 font-bold hover:underline">Register now</Link>
+          Already have an account? <Link to="/login" className="text-blue-600 font-bold hover:underline">Login here</Link>
         </p>
       </div>
     </div>
