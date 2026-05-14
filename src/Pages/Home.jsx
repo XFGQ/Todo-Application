@@ -60,6 +60,17 @@ export default function Home() {
     saveTodos(todos.filter(todo => todo.id !== id));
   };
 
+  const deleteTag = (tagName) => {
+    if (tagName === 'General') return;
+    const updatedTodos = todos.map(todo => {
+      if (todo.tag === tagName) {
+        return { ...todo, tag: 'General' };
+      }
+      return todo;
+    });
+    saveTodos(updatedTodos);
+  };
+
   const logout = () => {
     localStorage.removeItem('currentUser');
     navigate('/login');
@@ -71,6 +82,12 @@ export default function Home() {
 
   const allAvailableTags = [...new Set(todos.filter(todo => !todo.isDeleted).map(todo => todo.tag))];
   const activeTags = [...new Set(activeTodos.map(todo => todo.tag))];
+
+  const sortedActiveTags = activeTags.sort((a, b) => {
+    if (a === 'General') return -1;
+    if (b === 'General') return 1;
+    return a.localeCompare(b);
+  });
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 flex flex-col items-center">
@@ -85,13 +102,23 @@ export default function Home() {
         <div className="mt-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Active Tasks</h2>
           
-          {activeTags.length === 0 && <p className="text-gray-400 text-sm italic text-center">No active tasks.</p>}
+          {sortedActiveTags.length === 0 && <p className="text-gray-400 text-sm italic text-center">No active tasks.</p>}
 
-          {activeTags.map(tagName => (
+          {sortedActiveTags.map(tagName => (
             <div key={tagName} className="mb-6">
-              <h3 className="text-sm font-black text-blue-500 uppercase tracking-wider mb-2 px-1 border-l-4 border-blue-500 ml-1">
-                {tagName}
-              </h3>
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-sm font-black text-blue-500 uppercase tracking-wider px-1 border-l-4 border-blue-500 ml-1">
+                  {tagName}
+                </h3>
+                {tagName !== 'General' && (
+                  <button 
+                    onClick={() => deleteTag(tagName)}
+                    className="text-xs font-bold text-red-400 hover:text-red-600 transition"
+                  >
+                    Delete Tag
+                  </button>
+                )}
+              </div>
               <div className="space-y-2">
                 {activeTodos.filter(t => t.tag === tagName).map(todo => (
                   <div key={todo.id} className="flex justify-between items-center p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition">

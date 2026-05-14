@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function TodoAdd({ onAdd, existingTags }) {
   const [text, setText] = useState('');
-  const [selectedTag, setSelectedTag] = useState(existingTags.length > 0 ? existingTags[0] : 'General');
+  const [selectedTag, setSelectedTag] = useState('General');
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [newTag, setNewTag] = useState('');
 
@@ -16,6 +16,7 @@ export default function TodoAdd({ onAdd, existingTags }) {
     setText('');
     setNewTag('');
     setIsAddingNew(false);
+    setSelectedTag('General');
   };
 
   const handleTagChange = (e) => {
@@ -45,8 +46,8 @@ export default function TodoAdd({ onAdd, existingTags }) {
             onChange={handleTagChange}
             className="w-1/3 border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500 bg-white"
           >
-            {existingTags.length === 0 && <option value="General">General</option>}
-            {existingTags.map((t, index) => (
+            <option value="General">General</option>
+            {existingTags.filter(t => t !== 'General').map((t, index) => (
               <option key={index} value={t}>{t}</option>
             ))}
             <option value="ADD_NEW" className="font-bold text-blue-600">+ Add New Tag</option>
@@ -63,7 +64,10 @@ export default function TodoAdd({ onAdd, existingTags }) {
             />
             <button
               type="button"
-              onClick={() => setIsAddingNew(false)}
+              onClick={() => {
+                setIsAddingNew(false);
+                setSelectedTag('General');
+              }}
               className="bg-gray-200 text-gray-600 px-3 rounded-lg hover:bg-gray-300 font-bold"
             >
               X
