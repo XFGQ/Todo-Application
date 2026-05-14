@@ -1,15 +1,31 @@
 import { useState } from 'react';
 
-export default function TodoAdd({ onAdd }) {
+export default function TodoAdd({ onAdd, existingTags }) {
   const [text, setText] = useState('');
-  const [tag, setTag] = useState('');
+  const [selectedTag, setSelectedTag] = useState(existingTags.length > 0 ? existingTags[0] : 'General');
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newTag, setNewTag] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (text.trim() === '') return;
-    onAdd(text, tag.trim() || 'General');
+
+    const finalTag = isAddingNew ? (newTag.trim() || 'General') : (selectedTag || 'General');
+
+    onAdd(text, finalTag);
     setText('');
-    setTag('');
+    setNewTag('');
+    setIsAddingNew(false);
+  };
+
+  const handleTagChange = (e) => {
+    if (e.target.value === 'ADD_NEW') {
+      setIsAddingNew(true);
+      setSelectedTag('');
+    } else {
+      setIsAddingNew(false);
+      setSelectedTag(e.target.value);
+    }
   };
 
   return (
@@ -22,13 +38,38 @@ export default function TodoAdd({ onAdd }) {
           placeholder="Task description..."
           className="flex-1 border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500"
         />
-        <input
-          type="text"
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-          placeholder="Tag (Work, Personal...)"
-          className="w-1/3 border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500"
-        />
+        
+        {!isAddingNew ? (
+          <select
+            value={selectedTag}
+            onChange={handleTagChange}
+            className="w-1/3 border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500 bg-white"
+          >
+            {existingTags.length === 0 && <option value="General">General</option>}
+            {existingTags.map((t, index) => (
+              <option key={index} value={t}>{t}</option>
+            ))}
+            <option value="ADD_NEW" className="font-bold text-blue-600">+ Add New Tag</option>
+          </select>
+        ) : (
+          <div className="flex w-1/3 gap-1">
+            <input
+              type="text"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              placeholder="New tag name"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500"
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setIsAddingNew(false)}
+              className="bg-gray-200 text-gray-600 px-3 rounded-lg hover:bg-gray-300 font-bold"
+            >
+              X
+            </button>
+          </div>
+        )}
       </div>
       <button
         type="submit"

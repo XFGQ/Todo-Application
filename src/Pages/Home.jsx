@@ -69,7 +69,8 @@ export default function Home() {
   const completedTodos = todos.filter(todo => todo.isCompleted && !todo.isDeleted);
   const deletedTodos = todos.filter(todo => todo.isDeleted);
 
-  const tags = [...new Set(activeTodos.map(todo => todo.tag))];
+  const allAvailableTags = [...new Set(todos.filter(todo => !todo.isDeleted).map(todo => todo.tag))];
+  const activeTags = [...new Set(activeTodos.map(todo => todo.tag))];
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 flex flex-col items-center">
@@ -79,14 +80,14 @@ export default function Home() {
           <button onClick={logout} className="text-red-500 text-sm font-bold hover:underline">Logout</button>
         </div>
         
-        <TodoAdd onAdd={addTodo} />
+        <TodoAdd onAdd={addTodo} existingTags={allAvailableTags} />
         
         <div className="mt-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Active Tasks</h2>
           
-          {tags.length === 0 && <p className="text-gray-400 text-sm italic text-center">No active tasks.</p>}
+          {activeTags.length === 0 && <p className="text-gray-400 text-sm italic text-center">No active tasks.</p>}
 
-          {tags.map(tagName => (
+          {activeTags.map(tagName => (
             <div key={tagName} className="mb-6">
               <h3 className="text-sm font-black text-blue-500 uppercase tracking-wider mb-2 px-1 border-l-4 border-blue-500 ml-1">
                 {tagName}
