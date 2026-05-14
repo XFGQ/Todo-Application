@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Pages/Login';
+import Register from './Pages/Register'; // Buranın doğruluğunu kontrol et
 import Home from './Pages/Home'; 
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/todos" element={<Home />} />
       </Routes>
     </BrowserRouter>
