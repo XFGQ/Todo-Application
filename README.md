@@ -4,7 +4,7 @@
 
 - Username: `admin`
 - Password: `admin123`
-- todo.rinnesoft.com 
+- https://todo.rinnesoft.com 
 
 ---
 
