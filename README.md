@@ -1,16 +1,105 @@
-# React + Vite
+# Todo Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Yönetici Giriş Bilgileri (Admin Credentials)
 
-Currently, two official plugins are available:
+- Username: `admin`
+- Password: `admin123`
+- todo.rinnesoft.com 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Hakkında
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Bu proje, modern web geliştirme dünyasına giriş yapmak ve ReactJS, Vite ve Tailwind CSS yetkinliklerini pekiştirmek amacıyla geliştirilmiş kapsamlı bir Todo (Yapılacaklar Listesi) uygulamasıdır.
 
-## Expanding the ESLint configuration
+Kullanıcıların verileri tarayıcı hafızasında (LocalStorage) saklanır. Böylece herhangi bir backend sunucusuna ihtiyaç duymadan gerçekçi bir kullanım deneyimi sunar.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Özellikler
+
+### Kullanıcı Yönetimi
+- Kayıt Olma (Register)
+- Giriş Yapma (Login)
+
+### Çoklu Kullanıcı Desteği
+- Her kullanıcı kendi verilerini bağımsız olarak yönetebilir.
+
+### Kategori / Etiket (Tag) Sistemi
+- Görevleri kategorize etme
+- Yeni etiket ekleme
+- Etiket silme
+
+### Gelişmiş CRUD İşlemleri
+- Görev ekleme
+- Görev listeleme
+- Görev güncelleme
+- Görev silme
+
+### Çöp Kutusu (Trash)
+- Silinen görevleri geri yükleme
+- Kalıcı olarak silme
+
+### Tamamlananlar (Done)
+- Tamamlanan görevleri ayrı listede görüntüleme
+
+---
+
+# Kurulum ve Çalıştırma
+
+Bilgisayarınızda Node.js kurulu olduğundan emin olun.
+
+---
+
+## Windows İçin
+
+```bash
+# Depoyu klonlayın
+git clone <github-repo-linkiniz>
+
+# Proje klasörüne girin
+cd <proje-klasor-adi>
+
+# Bağımlılıkları yükleyin
+npm install
+
+# Uygulamayı başlatın
+npm run dev
+```
+
+---
+
+## Linux İçin
+
+```bash
+# Terminali açın ve depoyu klonlayın
+git clone <github-repo-linkiniz>
+
+# Proje klasörüne girin
+cd <proje-klasor-adi>
+
+# Paketleri kurun
+npm install
+
+# Geliştirme sunucusunu çalıştırın
+npm run dev
+```
+
+---
+
+# Kullanılan Teknolojiler
+
+- React (Vite)
+- Tailwind CSS
+- React Router DOM
+- LocalStorage API
+- SVG / Heroicons
+
+---
+
+# Not
+
+Bu döküman proje tanıtımı ve kurulumu için oluşturulmuştur.
+
+## Geliştirici
+XFGQ
