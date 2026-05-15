@@ -1,0 +1,35 @@
+name: Todo App Otomatik Yükleme # Robotun ismi
+
+on:
+  push:
+    branches:
+      - main # Sadece 'main' dalına (branch) bir şey gönderdiğimde çalış.
+
+jobs:
+  sunucuya-yukle: # İşin adı
+    runs-on: ubuntu-latest # Bu robot GitHub'ın sağladığı sanal bir bilgisayarda çalışsın.
+    
+    steps: # Yapılacak adımlar sırasıyla:
+      - name: Kodları Kopyala
+        uses: actions/checkout@v4 # Projenin dosyalarını GitHub'dan çekip robotun içine koyar.
+
+      - name: Node.js Kur
+        uses: actions/setup-node@v4 # Bilgisayara Node.js yükle.
+        with:
+          node-version: '20'
+
+      - name: Paketleri Yükle
+        run: npm install # Gerekli kütüphaneleri (react, vite vs.) yükle.
+
+      - name: Projeyi Derle (Build)
+        run: npm run build # 'dist' klasörünü oluştur.
+
+      - name: Sunucuya Gönder
+        uses: appleboy/scp-action@v0.1.7 # Dosyaları senin sunucuna güvenli taşıyan hazır bir araç.
+        with:
+          host: ${{ secrets.SERVER_IP }} # Sunucunun IP'si (Gizli)
+          username: ${{ secrets.SERVER_USERNAME }} # Kullanıcı adın (Gizli)
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # SSH anahtarın (Gizli)
+          source: "dist/*" # Sadece derlenen dosyaları gönder
+          target: "/var/www/todo.rinnesoft.com/html" # Sunucudaki hedef klasör
+          strip_components: 1 # 'dist' klasörünün kendisini değil, sadece içindekileri at.
