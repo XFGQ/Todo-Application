@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TodoAdd from '../Components/TodoAdd';
+import { getTodosFromStorage, saveTodosToStorage } from '../Interfaces/todoInterface';
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState('');
   const navigate = useNavigate();
   const currentUser = localStorage.getItem('currentUser');
 
@@ -12,13 +15,13 @@ export default function Home() {
       navigate('/login');
       return;
     }
-    const savedTodos = JSON.parse(localStorage.getItem(`todos_${currentUser}`) || '[]');
+    const savedTodos = getTodosFromStorage(currentUser);
     setTodos(savedTodos);
   }, [currentUser, navigate]);
 
   const saveTodos = (newTodos) => {
     setTodos(newTodos);
-    localStorage.setItem(`todos_${currentUser}`, JSON.stringify(newTodos));
+    saveTodosToStorage(currentUser, newTodos);
   };
 
   const addTodo = (text, tag) => {
@@ -71,6 +74,23 @@ export default function Home() {
     saveTodos(updatedTodos);
   };
 
+  const startEditing = (todo) => {
+    setEditingId(todo.id);
+    setEditText(todo.text);
+  };
+
+  const saveEdit = (id) => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        return { ...todo, text: editText };
+      }
+      return todo;
+    });
+    saveTodos(updatedTodos);
+    setEditingId(null);
+    setEditText('');
+  };
+
   const logout = () => {
     localStorage.removeItem('currentUser');
     navigate('/login');
@@ -111,10 +131,7 @@ export default function Home() {
                   {tagName}
                 </h3>
                 {tagName !== 'General' && (
-                  <button 
-                    onClick={() => deleteTag(tagName)}
-                    className="text-xs font-bold text-red-400 hover:text-red-600 transition"
-                  >
+                  <button onClick={() => deleteTag(tagName)} className="text-xs font-bold text-red-400 hover:text-red-600 transition">
                     Delete Tag
                   </button>
                 )}
@@ -122,14 +139,33 @@ export default function Home() {
               <div className="space-y-2">
                 {activeTodos.filter(t => t.tag === tagName).map(todo => (
                   <div key={todo.id} className="flex justify-between items-center p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-1">
                       <button 
                         onClick={() => toggleComplete(todo.id)}
                         className="w-5 h-5 rounded-full border-2 border-blue-500 hover:bg-blue-100 flex-shrink-0"
                       ></button>
-                      <span className="text-gray-800 font-medium">{todo.text}</span>
+                      
+                      {editingId === todo.id ? (
+                        <input
+                          type="text"
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          className="flex-1 border border-blue-300 rounded px-2 py-1 outline-none"
+                          autoFocus
+                        />
+                      ) : (
+                        <span className="text-gray-800 font-medium">{todo.text}</span>
+                      )}
                     </div>
-                    <button onClick={() => moveToTrash(todo.id)} className="text-red-500 hover:text-red-700 text-sm font-bold">Trash</button>
+                    
+                    <div className="flex gap-3 ml-2">
+                      {editingId === todo.id ? (
+                        <button onClick={() => saveEdit(todo.id)} className="text-green-600 hover:text-green-800 text-sm font-bold">Save</button>
+                      ) : (
+                        <button onClick={() => startEditing(todo)} className="text-blue-500 hover:text-blue-700 text-sm font-bold">Edit</button>
+                      )}
+                      <button onClick={() => moveToTrash(todo.id)} className="text-red-500 hover:text-red-700 text-sm font-bold">Trash</button>
+                    </div>
                   </div>
                 ))}
               </div>
