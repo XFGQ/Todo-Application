@@ -55,10 +55,10 @@ Bilgisayarınızda Node.js kurulu olduğundan emin olun.
 
 ```bash
 # Depoyu klonlayın
-git clone <github-repo-linkiniz>
+git clone https://github.com/XFGQ/Todo-Application.git
 
 # Proje klasörüne girin
-cd <proje-klasor-adi>
+cd Todo-Application
 
 # Bağımlılıkları yükleyin
 npm install
@@ -73,10 +73,10 @@ npm run dev
 
 ```bash
 # Terminali açın ve depoyu klonlayın
-git clone <github-repo-linkiniz>
+git clone https://github.com/XFGQ/Todo-Application.git
 
 # Proje klasörüne girin
-cd <proje-klasor-adi>
+cd Todo-Application
 
 # Paketleri kurun
 npm install
