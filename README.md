@@ -5,8 +5,7 @@
 - Username: `admin`
 - Password: `admin123`
 - https://todo.rinnesoft.com
-- https://effervescent-meerkat-8a856b.netlify.app/login
-
+- https://effervescent-meerkat-8a856b.netlify.app
 ---
 
 ## Hakkında
